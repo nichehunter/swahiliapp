@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: dockerfile
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_AUTH_API_URL: ${NEXT_PUBLIC_AUTH_API_URL}
         NEXT_PUBLIC_SWAHILI_API_URL: ${NEXT_PUBLIC_SWAHILI_API_URL}
     restart: unless-stopped
     ports:
@@ -16,7 +16,7 @@ services:
       NODE_ENV: production
       PORT: 8083
       HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_AUTH_API_URL: ${NEXT_PUBLIC_AUTH_API_URL}
       NEXT_PUBLIC_SWAHILI_API_URL: ${NEXT_PUBLIC_SWAHILI_API_URL}
     networks:
       - swahili-network
