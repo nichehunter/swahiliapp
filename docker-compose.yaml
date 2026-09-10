@@ -1,0 +1,27 @@
+name: swahiliapp
+
+services:
+  swahiliapp:
+    container_name: swahiliapp
+    build:
+      context: .
+      dockerfile: dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_SWAHILI_API_URL: ${NEXT_PUBLIC_SWAHILI_API_URL}
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      NODE_ENV: production
+      PORT: 8083
+      HOSTNAME: 0.0.0.0
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_SWAHILI_API_URL: ${NEXT_PUBLIC_SWAHILI_API_URL}
+    networks:
+      - swahili-network
+
+networks:
+  swahili-network:
+    external: true
+    name: swahili-network

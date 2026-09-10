@@ -1,0 +1,82 @@
+/* =========================================
+   CATEGORY SKELETON
+========================================= */
+
+.sw-category-skeleton {
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+
+  padding: 0 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  box-shadow:
+    0 3px 10px rgba(11, 23, 54, 0.07),
+    0 1px 3px rgba(11, 23, 54, 0.04);
+
+  overflow: hidden;
+}
+
+.sw-category-skeleton-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: linear-gradient(90deg, #edf1f4 25%, #f7f9fa 50%, #edf1f4 75%);
+
+  background-size: 200% 100%;
+
+  animation: sw-category-skeleton-loading 1.4s ease-in-out infinite;
+}
+
+.sw-category-skeleton-text {
+  width: 52px;
+  height: 9px;
+
+  border-radius: 5px;
+
+  background: linear-gradient(90deg, #edf1f4 25%, #f7f9fa 50%, #edf1f4 75%);
+
+  background-size: 200% 100%;
+
+  animation: sw-category-skeleton-loading 1.4s ease-in-out infinite;
+}
+
+/* Different widths for a more natural skeleton */
+.sw-category-skeleton:nth-child(2) .sw-category-skeleton-text {
+  width: 42px;
+}
+
+.sw-category-skeleton:nth-child(3) .sw-category-skeleton-text {
+  width: 76px;
+}
+
+.sw-category-skeleton:nth-child(4) .sw-category-skeleton-text {
+  width: 88px;
+}
+
+.sw-category-skeleton:nth-child(5) .sw-category-skeleton-text {
+  width: 48px;
+}
+
+.sw-category-skeleton:nth-child(6) .sw-category-skeleton-text {
+  width: 68px;
+}
+
+@keyframes sw-category-skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}

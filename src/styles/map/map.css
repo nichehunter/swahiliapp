@@ -1,0 +1,1665 @@
+/* =========================================================
+   SWAHILIEXPI MAP
+   ========================================================= */
+
+.sw-map-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #e9eef2;
+}
+
+.sw-map {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+}
+
+/* Make Leaflet fill the container */
+.sw-map-container .leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: #e9eef2;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* =========================================================
+   CUSTOM PLACE MARKERS
+   ========================================================= */
+
+.sw-place-marker-wrapper {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.sw-place-marker {
+  position: relative;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50% 50% 50% 0;
+
+  background: #ffffff;
+
+  border: 3px solid var(--marker-color);
+
+  color: var(--marker-color);
+
+  transform: rotate(-45deg);
+
+  box-shadow:
+    0 4px 12px rgba(11, 23, 54, 0.22),
+    0 2px 4px rgba(11, 23, 54, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Marker icon */
+.sw-place-marker span {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 15px;
+  height: 15px;
+
+  border-radius: 50%;
+
+  background: var(--marker-color);
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  transform: rotate(45deg);
+}
+
+/* Hover effect */
+.sw-place-marker:hover {
+  transform: rotate(-45deg) scale(1.08);
+
+  box-shadow:
+    0 7px 18px rgba(11, 23, 54, 0.25),
+    0 3px 7px rgba(11, 23, 54, 0.15);
+}
+
+/* =========================================================
+   CURRENT LOCATION
+   ========================================================= */
+
+/*
+   The current location is rendered with CircleMarker
+   from react-leaflet, so the main styling is handled
+   through pathOptions in CurrentLocationMarker.jsx.
+*/
+
+/* =========================================================
+   MAP POPUP
+   ========================================================= */
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 280px !important;
+}
+
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-tip {
+  background: #fff;
+}
+
+.leaflet-popup-close-button {
+  display: none !important;
+}
+
+.sw-popup-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sw-popup-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.sw-popup-action {
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #edf0f4;
+  border-radius: 50%;
+  background: #fff;
+  color: #667085;
+
+  font-size: 12px;
+  cursor: pointer;
+
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.sw-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.sw-popup-action:hover {
+  color: #0077b6;
+  background: #f0f9fc;
+  border-color: #ccecf5;
+  transform: translateY(-1px);
+}
+
+.sw-popup-action:active {
+  transform: scale(0.94);
+}
+
+.sw-map-popup {
+  width: 280px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.sw-popup-image {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sw-popup-image-img {
+  display: block;
+  object-fit: cover;
+}
+
+.sw-popup-content {
+  padding: 11px 12px 13px;
+  font-family:
+    "Plus Jakarta Sans",
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.sw-popup-content h4 {
+  margin: 0 0 7px;
+  color: #0b1736;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.sw-popup-info {
+  min-width: 0;
+  flex: 1;
+  font-family:
+    "Plus Jakarta Sans",
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* Category */
+.sw-popup-category {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 5px;
+  padding: 3px 7px;
+
+  border-radius: 5px;
+  background: #f0f8fc;
+  color: #0077b6;
+
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* Place name */
+.sw-popup-info h4 {
+  margin: 0 0 5px;
+
+  color: #0b1736;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Rating */
+.sw-popup-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  color: #98a2b3;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.sw-popup-rating .anticon {
+  color: #f5a623;
+  font-size: 11px;
+}
+
+.sw-popup-rating strong {
+  color: #344054;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sw-popup-rating span {
+  color: #98a2b3;
+  font-size: 9.5px;
+  font-weight: 400;
+}
+
+/* =========================================================
+   CUSTOM MAP CONTROLS
+   ========================================================= */
+
+.sw-custom-map-controls {
+  position: absolute;
+
+  right: 18px;
+
+  bottom: 26px;
+
+  z-index: 1000;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  box-shadow:
+    0 6px 20px rgba(11, 23, 54, 0.16),
+    0 2px 5px rgba(11, 23, 54, 0.08);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Control button */
+
+.sw-map-control-button {
+  width: 46px;
+
+  height: 46px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #344054;
+
+  font-size: 17px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sw-map-control-button:hover {
+  background: #f1f8fb;
+
+  color: #0077b6;
+}
+
+.sw-map-control-button:active {
+  transform: scale(0.94);
+}
+
+/* Location button */
+
+.sw-map-control-button:first-child {
+  color: #0077b6;
+}
+
+.sw-map-control-button:first-child:hover {
+  background: #eaf8fc;
+
+  color: #00649a;
+}
+
+/* Divider */
+
+.sw-map-control-divider {
+  width: 28px;
+
+  height: 1px;
+
+  background: #e7ebef;
+}
+
+/* =========================================================
+   LEAFLET DEFAULT CONTROLS
+   ========================================================= */
+
+/*
+   If you later decide to use Leaflet's own controls,
+   these styles keep them consistent with SwahiliExpi.
+*/
+
+.sw-map-container .leaflet-control-zoom {
+  border: 0 !important;
+
+  border-radius: 14px !important;
+
+  overflow: hidden;
+
+  box-shadow: 0 6px 20px rgba(11, 23, 54, 0.15) !important;
+}
+
+.sw-map-container .leaflet-control-zoom a {
+  width: 42px !important;
+
+  height: 42px !important;
+
+  display: flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 0 !important;
+
+  background: rgba(255, 255, 255, 0.96) !important;
+
+  color: #344054 !important;
+
+  font-size: 20px !important;
+
+  font-weight: 400;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sw-map-container .leaflet-control-zoom a:hover {
+  background: #f1f8fb !important;
+
+  color: #0077b6 !important;
+}
+
+.sw-map-container .leaflet-control-zoom-in {
+  border-bottom: 1px solid #e7ebef !important;
+}
+
+/* =========================================================
+   MAP ATTRIBUTION
+   ========================================================= */
+
+.sw-map-container .leaflet-control-attribution {
+  padding: 3px 7px;
+
+  border-radius: 6px 0 0 0;
+
+  background: rgba(255, 255, 255, 0.78);
+
+  color: #667085;
+
+  font-size: 9px;
+
+  backdrop-filter: blur(6px);
+}
+
+.sw-map-container .leaflet-control-attribution a {
+  color: #0077b6;
+
+  text-decoration: none;
+}
+
+/* =========================================================
+   MAP LOADING
+   ========================================================= */
+
+.sw-map-loading {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #eef3f6;
+
+  color: #475467;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.sw-map-loading::before {
+  content: "";
+
+  width: 22px;
+
+  height: 22px;
+
+  margin-right: 10px;
+
+  border: 2px solid #d7e4ea;
+
+  border-top-color: #0077b6;
+
+  border-radius: 50%;
+
+  animation: sw-map-spin 0.8s linear infinite;
+}
+
+@keyframes sw-map-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .sw-custom-map-controls {
+    right: 14px;
+
+    bottom: 82px;
+
+    border-radius: 13px;
+  }
+
+  .sw-map-control-button {
+    width: 44px;
+
+    height: 44px;
+
+    font-size: 16px;
+  }
+
+  .sw-map-container .leaflet-popup-content {
+    min-width: 200px;
+  }
+
+  .sw-map-popup {
+    padding: 14px;
+  }
+
+  .sw-map-popup h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sw-custom-map-controls {
+    right: 12px;
+
+    bottom: 76px;
+  }
+
+  .sw-map-control-button {
+    width: 42px;
+
+    height: 42px;
+  }
+
+  .sw-map-container .leaflet-popup-content {
+    min-width: 190px;
+  }
+
+  .sw-place-marker {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sw-place-marker span {
+    width: 21px;
+    height: 21px;
+    font-size: 11px;
+  }
+}
+
+/* =====================================================
+   MAP TILE SWITCHER
+===================================================== */
+
+.sw-map-tile-switcher {
+  position: absolute;
+  left: 18px;
+  bottom: 24px;
+
+  width: 76px;
+  height: 76px;
+
+  padding: 0;
+  border: 3px solid #ffffff;
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  cursor: pointer;
+
+  z-index: 1000;
+
+  box-shadow:
+    0 3px 10px rgba(11, 23, 54, 0.22),
+    0 1px 3px rgba(11, 23, 54, 0.12);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.sw-map-tile-switcher:hover {
+  transform: scale(1.04);
+
+  box-shadow:
+    0 5px 16px rgba(11, 23, 54, 0.28),
+    0 2px 5px rgba(11, 23, 54, 0.15);
+}
+
+.sw-map-tile-switcher:active {
+  transform: scale(0.96);
+}
+
+.sw-map-tile-preview {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+/* Label at bottom */
+
+.sw-map-tile-label {
+  position: absolute;
+
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+
+  padding: 3px 5px;
+
+  border-radius: 5px;
+
+  background: rgba(11, 23, 54, 0.78);
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  line-height: 1;
+
+  text-align: center;
+
+  backdrop-filter: blur(4px);
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+  .sw-map-tile-switcher {
+    left: 14px;
+    bottom: 92px;
+
+    width: 68px;
+    height: 68px;
+
+    border-width: 2px;
+  }
+
+  .sw-map-tile-label {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sw-map-tile-switcher {
+    left: 12px;
+    bottom: 88px;
+
+    width: 62px;
+    height: 62px;
+  }
+}
+
+.sw-category-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 350px;
+  max-width: 90vw;
+
+  z-index: 3500;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+  border-right: 1px solid #e9edf3;
+
+  box-shadow: 8px 0 30px rgba(11, 23, 54, 0.12);
+
+  font-family:
+    "Plus Jakarta Sans",
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* ==============================
+   HEADER
+============================== */
+
+.sw-category-drawer-header {
+  flex-shrink: 0;
+
+  height: 76px;
+  padding: 0 16px 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #eef1f5;
+}
+
+.sw-category-drawer-eyebrow {
+  display: block;
+  margin-bottom: 2px;
+
+  color: #8a94a6;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.sw-category-drawer-header h2 {
+  margin: 0;
+
+  color: #0b1736;
+
+  font-size: 20px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.sw-category-drawer-close {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: #f4f6f9;
+  color: #667085;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: all 0.18s ease;
+}
+
+.sw-category-drawer-close:hover {
+  background: #edf1f5;
+  color: #0b1736;
+}
+
+/* ==============================
+   SEARCH
+============================== */
+
+.sw-category-drawer-search {
+  flex-shrink: 0;
+
+  margin: 12px 14px;
+
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 0 11px;
+
+  border: 1px solid #e5e9ef;
+  border-radius: 10px;
+
+  background: #f8fafc;
+
+  color: #98a2b3;
+}
+
+.sw-category-drawer-search:focus-within {
+  border-color: #8dd9eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.08);
+}
+
+.sw-category-drawer-search > .anticon {
+  font-size: 14px;
+}
+
+.sw-category-drawer-search input {
+  flex: 1;
+
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #344054;
+
+  font-size: 12px;
+}
+
+.sw-category-drawer-search input::placeholder {
+  color: #a5adba;
+}
+
+.sw-category-drawer-search button {
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  background: transparent;
+
+  color: #98a2b3;
+
+  cursor: pointer;
+}
+
+/* ==============================
+   SCROLL AREA
+============================== */
+
+.sw-category-drawer-body {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  padding: 0 14px 20px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #d9dee7 transparent;
+}
+
+.sw-category-drawer-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sw-category-drawer-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sw-category-drawer-body::-webkit-scrollbar-thumb {
+  background: #d9dee7;
+  border-radius: 10px;
+}
+
+/* ==============================
+   ADVERTISEMENT
+============================== */
+
+.sw-category-ad {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  height: 115px;
+
+  overflow: hidden;
+
+  margin-bottom: 14px;
+
+  border-radius: 11px;
+
+  text-decoration: none;
+
+  background: #0b1736;
+}
+
+.sw-category-ad-image {
+  object-fit: cover;
+
+  transition: transform 0.35s ease;
+}
+
+.sw-category-ad:hover .sw-category-ad-image {
+  transform: scale(1.04);
+}
+
+.sw-category-ad-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  padding: 12px;
+
+  background: linear-gradient(
+    to top,
+    rgba(11, 23, 54, 0.82),
+    rgba(11, 23, 54, 0.05)
+  );
+
+  color: #ffffff;
+}
+
+.sw-category-ad-overlay span {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+}
+
+.sw-category-ad-overlay strong {
+  margin-top: 2px;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sw-category-ad-overlay small {
+  margin-top: 2px;
+
+  font-size: 9px;
+  opacity: 0.82;
+}
+
+/* ==============================
+   RESULT HEADER
+============================== */
+
+.sw-category-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 2px 2px 8px;
+
+  color: #8a94a6;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ==============================
+   PLACE LIST
+============================== */
+
+.sw-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sw-category-place {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 7px;
+
+  border: 1px solid #eef1f5;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.sw-category-place:hover {
+  border-color: #d8eaf0;
+
+  box-shadow: 0 4px 14px rgba(11, 23, 54, 0.07);
+
+  transform: translateY(-1px);
+}
+
+/* ==============================
+   IMAGE
+============================== */
+
+.sw-category-place-image {
+  position: relative;
+
+  flex: 0 0 78px;
+
+  width: 78px;
+  height: 68px;
+
+  overflow: hidden;
+
+  border-radius: 8px;
+
+  background: #eef2f6;
+}
+
+.sw-category-place-img {
+  object-fit: cover;
+
+  transition: transform 0.3s ease;
+}
+
+.sw-category-place:hover .sw-category-place-img {
+  transform: scale(1.05);
+}
+
+/* ==============================
+   INFO
+============================== */
+
+.sw-category-place-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.sw-category-place-info h3 {
+  margin: 0 0 3px;
+
+  color: #0b1736;
+
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sw-category-place-type {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #8a94a6;
+
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.sw-category-place-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+
+  font-size: 9px;
+}
+
+.sw-category-place-rating .anticon {
+  color: #f5a623;
+  font-size: 9px;
+}
+
+.sw-category-place-rating strong {
+  color: #344054;
+  font-size: 10px;
+}
+
+.sw-category-place-rating span {
+  color: #98a2b3;
+}
+
+/* ==============================
+   EMPTY
+============================== */
+
+.sw-category-empty {
+  min-height: 220px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: #98a2b3;
+}
+
+.sw-category-empty-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 10px;
+
+  border-radius: 50%;
+
+  background: #f3f7fa;
+
+  color: #0077b6;
+
+  font-size: 17px;
+}
+
+.sw-category-empty strong {
+  color: #344054;
+  font-size: 13px;
+}
+
+.sw-category-empty span {
+  max-width: 220px;
+
+  margin-top: 4px;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   MAP PAGE
+========================================= */
+
+.sw-map-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* =========================================
+   MAP LOADING OVERLAY
+========================================= */
+
+.sw-map-loading-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: 2500;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Keep the map visible */
+  background: rgba(11, 23, 54, 0.16);
+
+  pointer-events: all;
+
+  animation: swLoaderFadeIn 0.2s ease;
+}
+
+@keyframes swLoaderFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   LOADER
+========================================= */
+
+.sw-map-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+/* =========================================
+   ROTATING CIRCLE
+========================================= */
+
+.sw-loader-ring {
+  position: relative;
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  /*
+    Multi-color ring:
+    Ocean Blue → Aqua → Sunset Orange
+  */
+  background: conic-gradient(
+    from 0deg,
+    #0077b6 0deg,
+    #00b4d8 120deg,
+    #48cae4 210deg,
+    #ff7a00 300deg,
+    #ffa500 340deg,
+    #0077b6 360deg
+  );
+
+  animation: swLoaderRotate 1.15s linear infinite;
+
+  box-shadow:
+    0 4px 16px rgba(0, 119, 182, 0.28),
+    0 2px 10px rgba(255, 122, 0, 0.16);
+}
+
+@keyframes swLoaderRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================
+   CUT OUT CENTER
+========================================= */
+
+.sw-loader-inner {
+  position: absolute;
+  inset: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  /*
+    Transparent center so the map
+    can still be seen through it.
+  */
+  background: rgba(255, 255, 255, 0.88);
+
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* =========================================
+   CENTER DOT
+========================================= */
+
+.sw-loader-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #ff7a00;
+
+  box-shadow:
+    0 0 0 4px rgba(255, 122, 0, 0.12),
+    0 2px 8px rgba(255, 122, 0, 0.35);
+
+  animation: swLoaderPulse 1s ease-in-out infinite;
+}
+
+@keyframes swLoaderPulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.75;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   LOADING TEXT
+========================================= */
+
+.sw-map-loader strong {
+  display: inline-flex;
+  align-items: center;
+
+  margin-top: 12px;
+  padding: 6px 11px;
+
+  border-radius: 999px;
+
+  background: rgba(11, 23, 54, 0.82);
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.2;
+
+  letter-spacing: -0.01em;
+
+  box-shadow: 0 4px 12px rgba(11, 23, 54, 0.18);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* =========================================
+   LOADING DESCRIPTION
+========================================= */
+
+.sw-loading-text {
+  display: inline-flex;
+
+  margin-top: 5px;
+  padding: 4px 9px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  color: #0b1736;
+
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.3;
+
+  box-shadow: 0 3px 10px rgba(11, 23, 54, 0.12);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.sw-map-loader strong::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  margin-right: 6px;
+
+  border-radius: 50%;
+
+  background: #ff7a00;
+
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
+
+  animation: swLoadingAccent 1s ease-in-out infinite;
+}
+
+@keyframes swLoadingAccent {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+  .sw-loader-ring {
+    width: 52px;
+    height: 52px;
+  }
+
+  .sw-loader-inner {
+    inset: 5px;
+  }
+
+  .sw-map-loader strong {
+    font-size: 11px;
+  }
+
+  .sw-map-loader > span {
+    font-size: 8.5px;
+  }
+}
+
+/* =========================================
+   SUBCATEGORY
+========================================= */
+
+.sw-category-subcategory {
+  padding: 0 16px 12px;
+  background: #fff;
+}
+
+.sw-category-subcategory-select {
+  width: 100%;
+}
+
+/* Select control */
+.sw-category-subcategory-select.ant-select {
+  height: 44px;
+  border-radius: 11px;
+  background: #f8fafc;
+}
+
+.sw-category-subcategory-select .ant-select-selector {
+  height: 44px !important;
+  padding: 0 14px !important;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #e5e7eb !important;
+  border-radius: 10px !important;
+
+  background: #f8fafc !important;
+
+  box-shadow: none !important;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease !important;
+}
+
+/* Hover */
+.sw-category-subcategory-select:hover .ant-select-selector {
+  border-color: #cbd5e1 !important;
+  background: #fff !important;
+}
+
+/* Focus */
+.sw-category-subcategory-select.ant-select-focused .ant-select-selector {
+  border-color: #0077b6 !important;
+  background: #fff !important;
+
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.08) !important;
+}
+
+/* Selected text */
+.sw-category-subcategory-select .ant-select-selection-item {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 42px;
+}
+
+/* Placeholder */
+.sw-category-subcategory-select .ant-select-selection-placeholder {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* Arrow */
+.sw-category-subcategory-select .ant-select-arrow {
+  color: #64748b;
+  font-size: 11px;
+}
+
+/* =========================================
+   DROPDOWN
+========================================= */
+
+.sw-category-subcategory-dropdown {
+  z-index: 2000 !important;
+
+  padding: 6px !important;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px !important;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.12),
+    0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Search input inside dropdown */
+.sw-category-subcategory-dropdown .ant-select-item-option-content {
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.sw-category-subcategory-dropdown .ant-select-item-option {
+  min-height: 40px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 11px !important;
+
+  border-radius: 8px;
+
+  margin: 2px 0;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+/* Hover */
+.sw-category-subcategory-dropdown .ant-select-item-option-active {
+  background: #f0f9ff !important;
+}
+
+/* Selected */
+.sw-category-subcategory-dropdown .ant-select-item-option-selected {
+  background: #eaf7fc !important;
+
+  color: #0077b6 !important;
+
+  font-weight: 600;
+}
+
+/* Selected + hover */
+.sw-category-subcategory-dropdown
+  .ant-select-item-option-selected.ant-select-item-option-active {
+  background: #e0f2fe !important;
+}
+
+/* =========================================
+   ANT DESIGN SEARCH INPUT
+========================================= */
+
+.sw-category-subcategory-dropdown .ant-select-dropdown {
+  padding: 6px;
+}
+
+.sw-category-subcategory-dropdown .ant-select-selection-search-input {
+  font-size: 13px !important;
+}
+
+/* Search box */
+.sw-category-subcategory-dropdown .ant-select-item-option-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sw-category-subcategory-dropdown {
+  padding: 6px !important;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px !important;
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.12),
+    0 2px 8px rgba(15, 23, 42, 0.05) !important;
+  overflow: hidden;
+}
+/* =========================================
+   LOAD MORE PAGINATION
+========================================= */
+.sw-category-load-more {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.96);
+  color: #0077b6;
+
+  box-shadow:
+    0 6px 18px rgba(15, 23, 42, 0.16),
+    0 2px 6px rgba(15, 23, 42, 0.08);
+
+  font-size: 15px;
+
+  cursor: pointer;
+  z-index: 20;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sw-category-load-more:hover:not(:disabled) {
+  transform: translateX(-50%) translateY(-2px);
+
+  background: #0077b6;
+  color: #fff;
+
+  box-shadow:
+    0 8px 22px rgba(0, 119, 182, 0.24),
+    0 3px 8px rgba(15, 23, 42, 0.1);
+}
+
+.sw-category-load-more:active:not(:disabled) {
+  transform: translateX(-50%) translateY(0);
+}
+
+.sw-category-load-more:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+/* Loading spinner */
+.sw-category-load-more-spinner {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid #dbeafe;
+  border-top-color: #0077b6;
+
+  border-radius: 50%;
+
+  animation: sw-category-load-spin 0.7s linear infinite;
+}
+
+@keyframes sw-category-load-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
