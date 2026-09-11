@@ -42,7 +42,10 @@
 }
 
 .sw-place-marker {
-  position: relative;
+  position: absolute;
+
+  left: 45%;
+  bottom: 5px;
 
   width: 30px;
   height: 30px;
@@ -99,6 +102,59 @@
   box-shadow:
     0 7px 18px rgba(11, 23, 54, 0.25),
     0 3px 7px rgba(11, 23, 54, 0.15);
+}
+
+/* =========================================================
+   MARKER CONTAINER
+   ========================================================= */
+
+.sw-place-marker-wrapper {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.sw-place-marker-container {
+  position: relative;
+
+  width: 210px;
+  height: 40px;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   TITLE
+   LEFT + BOTTOM OF MARKER
+   ========================================================= */
+
+.sw-place-marker-title {
+  position: absolute;
+
+  right: calc(50% - 10px);
+  top: 35px;
+
+  max-width: 130px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: var(--marker-color);
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.1px;
+
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.95),
+    0 0 4px rgba(255, 255, 255, 0.9);
+
+  z-index: 1;
 }
 
 /* =========================================================
@@ -1720,5 +1776,3 @@
     background-position: -100% 0;
   }
 }
-
-

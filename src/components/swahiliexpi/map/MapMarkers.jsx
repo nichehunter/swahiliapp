@@ -4,6 +4,7 @@ import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import MapPopup from "./MapPopup";
 import { useEffect, useRef } from "react";
+import { toSmartTitleCase } from "@/libs/utils/char";
 
 const CATEGORY_CONFIG = {
   sports: {
@@ -47,23 +48,39 @@ const CATEGORY_CONFIG = {
   },
 };
 
-function createPlaceIcon(category) {
-  const config = CATEGORY_CONFIG[category] || {};
+function createPlaceIcon(category, title) {
+  const config = CATEGORY_CONFIG[category] || {
+    symbol: "●",
+    color: "#0077B6",
+  };
+
+  const safeTitle = String(title || "Place")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
   return L.divIcon({
     className: "sw-place-marker-wrapper",
 
     html: `
       <div
-        class="sw-place-marker"
+        class="sw-place-marker-container"
         style="--marker-color:${config.color}"
       >
-        <span>${config.symbol}</span>
+        <div class="sw-place-marker">
+          <span>${config.symbol}</span>
+        </div>
+
+        <span class="sw-place-marker-title">
+          ${toSmartTitleCase(safeTitle)}
+        </span>
       </div>
     `,
 
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],
+    iconSize: [210, 40],
+    iconAnchor: [105, 40],
     popupAnchor: [0, -30],
   });
 }
@@ -101,7 +118,7 @@ export default function MapMarkers({
           ref={(marker) => {
             markerRefs.current[place.entity_id] = marker;
           }}
-          icon={createPlaceIcon(place.category_name)}
+          icon={createPlaceIcon(place.category_name, place.title)}
           eventHandlers={{
             mouseover: (event) => {
               event.target.openPopup();
