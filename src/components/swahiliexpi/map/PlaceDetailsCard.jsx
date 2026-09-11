@@ -191,10 +191,11 @@ export default function PlaceDetailsCard({
   open = false,
   categoryDrawerOpen = false,
   onClose,
+  setLoadingDetails,
+  loadingDetails,
 }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
@@ -212,7 +213,7 @@ export default function PlaceDetailsCard({
     let cancelled = false;
 
     const fetchDetails = async () => {
-      setLoading(true);
+      setLoadingDetails(true);
       setError(false);
       setData(null);
       setActiveTab("overview");
@@ -230,7 +231,7 @@ export default function PlaceDetailsCard({
         }
       } finally {
         if (!cancelled) {
-          setLoading(false);
+          setLoadingDetails(false);
         }
       }
     };
@@ -256,7 +257,7 @@ export default function PlaceDetailsCard({
             : "sw-place-details-card--drawer-closed"
         }`}
       >
-        {loading ? (
+        {loadingDetails ? (
           <LoadingDetails onClose={onClose} />
         ) : error ? (
           <ErrorDetails onClose={onClose} />

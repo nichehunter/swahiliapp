@@ -37,9 +37,10 @@ const getCategoryIcon = (name) => {
 export default function CategoryBar({
   activeCategory = "explore",
   onCategoryChange,
+  setCategories,
+  categories,
 }) {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
 
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -219,7 +220,7 @@ export default function CategoryBar({
      EMPTY
      ========================================================= */
 
-  if (!categories.length) {
+  if (!categories?.length) {
     return null;
   }
 

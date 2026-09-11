@@ -538,7 +538,7 @@
   .sw-custom-map-controls {
     right: 14px;
 
-    bottom: 82px;
+    bottom: 10px;
 
     border-radius: 13px;
   }
@@ -568,7 +568,7 @@
   .sw-custom-map-controls {
     right: 12px;
 
-    bottom: 76px;
+    bottom: 10px;
   }
 
   .sw-map-control-button {
@@ -681,7 +681,7 @@
 @media (max-width: 768px) {
   .sw-map-tile-switcher {
     left: 14px;
-    bottom: 92px;
+    bottom: 10px;
 
     width: 68px;
     height: 68px;
@@ -697,7 +697,7 @@
 @media (max-width: 480px) {
   .sw-map-tile-switcher {
     left: 12px;
-    bottom: 88px;
+    bottom: 10px;
 
     width: 62px;
     height: 62px;
@@ -1661,5 +1661,62 @@
 @keyframes sw-category-load-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.sw-category-place-skeleton {
+  pointer-events: none;
+  cursor: default;
+}
+
+.sw-category-skeleton-image {
+  width: 100%;
+  height: 100%;
+  min-height: 78px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f1f3f5 25%, #e7eaed 37%, #f1f3f5 63%);
+  background-size: 400% 100%;
+  animation: sw-category-skeleton-loading 1.4s ease infinite;
+}
+
+.sw-category-skeleton-title {
+  width: 75%;
+  height: 15px;
+  margin-bottom: 9px;
+  border-radius: 5px;
+
+  background: linear-gradient(90deg, #f1f3f5 25%, #e7eaed 37%, #f1f3f5 63%);
+  background-size: 400% 100%;
+  animation: sw-category-skeleton-loading 1.4s ease infinite;
+}
+
+.sw-category-skeleton-type {
+  width: 48%;
+  height: 12px;
+  margin-bottom: 12px;
+  border-radius: 5px;
+
+  background: linear-gradient(90deg, #f1f3f5 25%, #e7eaed 37%, #f1f3f5 63%);
+  background-size: 400% 100%;
+  animation: sw-category-skeleton-loading 1.4s ease infinite;
+}
+
+.sw-category-skeleton-rating {
+  width: 90px;
+  height: 11px;
+  border-radius: 5px;
+
+  background: linear-gradient(90deg, #f1f3f5 25%, #e7eaed 37%, #f1f3f5 63%);
+  background-size: 400% 100%;
+  animation: sw-category-skeleton-loading 1.4s ease infinite;
+}
+
+@keyframes sw-category-skeleton-loading {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
   }
 }

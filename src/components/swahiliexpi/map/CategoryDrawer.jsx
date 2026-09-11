@@ -15,6 +15,7 @@ export default function CategoryDrawer({
   category,
   setSubcategoryId,
   subcategoryId,
+  loadingLocation,
   locations = [],
   pagination,
   loadingMore = false,
@@ -38,6 +39,15 @@ export default function CategoryDrawer({
     event.preventDefault();
     if (!search.trim()) return;
     onSearch?.(search.trim());
+  };
+
+  const handlePlaceSelect = (place) => {
+    onPlaceSelect?.(place);
+
+    // Close category drawer on tablet/mobile
+    if (window.matchMedia("(max-width: 991px)").matches) {
+      onClose?.();
+    }
   };
 
   return (
@@ -156,13 +166,20 @@ export default function CategoryDrawer({
 
         {/* LIST */}
         <div className="sw-category-list">
-          {locations.length > 0 ? (
+          {loadingLocation ? (
+            <>
+              <CategoryPlaceSkeleton />
+              <CategoryPlaceSkeleton />
+              <CategoryPlaceSkeleton />
+              <CategoryPlaceSkeleton />
+            </>
+          ) : locations.length > 0 ? (
             locations.map((place) => (
               <button
                 type="button"
                 key={place.entity_id}
                 className="sw-category-place"
-                onClick={() => onPlaceSelect?.(place)}
+                onClick={() => handlePlaceSelect(place)}
                 onMouseEnter={() => onPlaceHover?.(place)}
                 onMouseLeave={() => onPlaceHover?.(null)}
               >
@@ -225,5 +242,22 @@ export default function CategoryDrawer({
         )}
       </div>
     </aside>
+  );
+}
+
+function CategoryPlaceSkeleton() {
+  return (
+    <div className="sw-category-place sw-category-place-skeleton">
+      <div className="sw-category-place-image">
+        <div className="sw-category-skeleton-image" />
+      </div>
+
+      <div className="sw-category-place-info">
+        <div className="sw-category-skeleton-title" />
+        <div className="sw-category-skeleton-type" />
+
+        <div className="sw-category-skeleton-rating" />
+      </div>
+    </div>
   );
 }

@@ -18,6 +18,7 @@ export default function MapHeader({
   activeCategory,
   onCategoryChange,
   categories,
+  setCategories,
 
   onBrandClick,
   onSaved,
@@ -68,6 +69,7 @@ export default function MapHeader({
               categories={categories}
               activeCategory={activeCategory}
               onCategoryChange={onCategoryChange}
+              setCategories={setCategories}
             />
           </div>
         ) : (
@@ -87,7 +89,9 @@ export default function MapHeader({
         onClose={onMenuClose}
         activeItem={activeCategory}
         onNavigate={onMenuNavigate}
+        onCategoryChange={onCategoryChange}
         onSignIn={onSignIn}
+        categories={categories}
       />
     </header>
   );

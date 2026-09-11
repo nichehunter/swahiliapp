@@ -30,6 +30,7 @@ export default function Map() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("explore");
   const [activeNavigation, setActiveNavigation] = useState("explore");
+  const [categories, setCategories] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [subcategories, setSubcategories] = useState([]);
   const [subcategoryId, setSubcategoryId] = useState(null);
@@ -38,6 +39,7 @@ export default function Map() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [categoryDrawerOpen, setCategoryDrawerOpen] = useState(false);
   const [drawerCategory, setDrawerCategory] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
   const [locations, setLocations] = useState([]);
   const [locationsLoading, setLocationsLoading] = useState(true);
   const [locationsPagination, setLocationsPagination] = useState({
@@ -62,10 +64,14 @@ export default function Map() {
     const fetchLocations = async () => {
       if (!mapViewport.bbox || !mapViewport.zoom) return;
 
-      // Show full loading overlay only when we don't have locations yet
-      const isInitialLoad = !hasLoadedLocations;
+      const isFilterChange =
+        index !== undefined ||
+        drawerCategory !== undefined ||
+        subcategoryId !== undefined;
 
-      if (isInitialLoad) {
+      const shouldShowLoading = !hasLoadedLocations || isFilterChange;
+
+      if (shouldShowLoading) {
         setLocationsLoading(true);
       }
 
@@ -79,8 +85,10 @@ export default function Map() {
           offset: 0,
           limit: 500,
         });
+
         setLocations(response?.results || []);
         setHasLoadedLocations(true);
+
         setLocationsPagination({
           totalCount: response?.total_count || 0,
           count: response?.count || 0,
@@ -111,7 +119,7 @@ export default function Map() {
 
         notify.error("failed to load locations", errorMessage);
       } finally {
-        if (isInitialLoad) {
+        if (shouldShowLoading) {
           setLocationsLoading(false);
         }
       }
@@ -305,7 +313,7 @@ export default function Map() {
         }}
       />
 
-      {locationsLoading && (
+      {locationsLoading && !loadingDetails && (
         <div className="sw-map-loading-overlay">
           <div className="sw-map-loader">
             <div className="sw-loader-ring">
@@ -333,6 +341,8 @@ export default function Map() {
           setIndex((prev) => prev + 1);
           setHasLoadedLocations(false);
         }}
+        categories={categories}
+        setCategories={setCategories}
         activeCategory={activeCategory}
         onCategoryChange={handleCategoryChange}
         categoryDrawerOpen={categoryDrawerOpen}
@@ -358,6 +368,7 @@ export default function Map() {
         category={drawerCategory}
         locations={locations}
         pagination={locationsPagination}
+        loadingLocation={locationsLoading}
         loadingMore={loadingMoreLocations}
         onLoadMore={loadMoreLocations}
         subcategories={subcategories}
@@ -392,12 +403,14 @@ export default function Map() {
         open={!!selectedPlace}
         categoryDrawerOpen={categoryDrawerOpen}
         onClose={() => setSelectedPlace(null)}
+        setLoadingDetails={setLoadingDetails}
+        loadingDetails={loadingDetails}
       />
 
-      <BottomNavigation
+      {/* <BottomNavigation
         activeItem={activeNavigation}
         onChange={handleBottomNavigation}
-      />
+      /> */}
     </div>
   );
 }

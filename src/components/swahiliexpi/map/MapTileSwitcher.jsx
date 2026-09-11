@@ -1,5 +1,6 @@
 "use client";
 
+import { Image } from "antd";
 import { useMap } from "react-leaflet";
 
 export default function MapTileSwitcher({
@@ -30,10 +31,11 @@ export default function MapTileSwitcher({
       onClick={handleChange}
       aria-label={`Switch to ${isStreet ? "satellite" : "street"} map`}
     >
-      <img
+      <Image
         src={isStreet ? satelliteUrl : streetUrl}
         alt=""
         className="sw-map-tile-preview"
+        preview={false}
       />
 
       <span className="sw-map-tile-label">
