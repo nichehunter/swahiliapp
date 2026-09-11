@@ -366,6 +366,8 @@ export default function Map() {
         subcategoriesLoading={subcategoriesLoading}
         onClose={() => {
           handleCategoryDrawerClose();
+          setSubcategoryId(null);
+          setSubcategories([]);
         }}
         onPlaceSelect={(place) => {
           setSelectedPlace(place);

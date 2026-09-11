@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import Brand from "./Brand";
 import SearchBar from "./SearchBar";
 import CategoryBar from "./CategoryBar";
@@ -28,8 +30,18 @@ export default function MapHeader({
   filterValues,
   onFilterChange,
 }) {
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
+  const handleMobileSearchToggle = () => {
+    setMobileSearchOpen((prev) => !prev);
+  };
+
   return (
-    <header className="sw-map-header">
+    <header
+      className={`sw-map-header ${
+        mobileSearchOpen ? "mobile-search-active" : ""
+      }`}
+    >
       {/* Brand */}
       <Brand onClick={onBrandClick} onMenu={onMenu} />
 
@@ -39,6 +51,8 @@ export default function MapHeader({
           onChange={onSearchChange}
           onClear={onSearchClear}
           onSearch={onSearch}
+          mobileOpen={mobileSearchOpen}
+          onMobileToggle={handleMobileSearchToggle}
         />
       )}
 
