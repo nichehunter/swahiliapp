@@ -74,10 +74,7 @@ export default function MapMarkers({
   onPlaceSelect,
   hoveredPlace,
 }) {
-
   const markerRefs = useRef({});
-
-  
 
   useEffect(() => {
     if (hoveredPlace) {
@@ -94,9 +91,6 @@ export default function MapMarkers({
       marker?.closePopup();
     });
   }, [hoveredPlace]);
-
-  
-  
 
   return (
     <>

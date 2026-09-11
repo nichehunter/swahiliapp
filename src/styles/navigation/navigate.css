@@ -125,7 +125,7 @@
 .sw-map-header > .sw-map-header-actions {
   position: absolute;
 
-  right: 0;
+  right: 10px;
   top: 5px;
 
   width: 155px;
@@ -2171,5 +2171,17 @@
     height: 32px;
 
     flex-basis: 32px;
+  }
+}
+
+@media (min-width: 992px) {
+  .sw-mobile-search-toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .sw-mobile-search-toggle {
+    display: flex !important;
   }
 }
