@@ -4,6 +4,7 @@ import { getFirstWord, getInitials, toTitleCase } from "@/libs/utils/char";
 import {
   EnvironmentOutlined,
   CoffeeOutlined,
+  BookOutlined,
   HeartOutlined,
   HistoryOutlined,
   ShoppingOutlined,
@@ -87,9 +88,9 @@ export default function SideDrawer({
         title: "Your Activity",
         items: [
           {
-            key: "saved",
-            label: "Saved",
-            icon: <HeartOutlined />,
+            key: "bookmarks",
+            label: "Bookmarks",
+            icon: <i className="bi bi-bookmark" />,
           },
           {
             key: "recent",
@@ -200,7 +201,7 @@ export default function SideDrawer({
                       if (item.category) {
                         onCategoryChange?.(item.category);
                       } else {
-                        onNavigate?.(item.key);
+                        onNavigate?.(item);
                       }
 
                       onClose?.();

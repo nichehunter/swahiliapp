@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
 
 import MapHeader from "@/components/swahiliexpi/navigation/MapHeader";
 import CategoryDrawer from "@/components/swahiliexpi/map/CategoryDrawer";
@@ -14,11 +15,17 @@ import "@/styles/map/card.css";
 import "@/styles/map/galary.css";
 
 import { loadDictionaryParent } from "@/services/config/dictinaryService";
-import { loadEventMap, loadEventShared } from "@/services/gateway/eventService";
+import {
+  loadEventMap,
+  loadEventShared,
+  loadNavigationEventMap,
+} from "@/services/gateway/eventService";
 
 import { postView } from "@/services/engagement/engagementService";
 
 import { useNotification } from "@/components/common/notification/NotificationProvider";
+import NavigationDrawer from "@/components/swahiliexpi/map/NavigationDrawer";
+import recentEventStore from "@/stores/recentEventStore";
 
 const SwahiliExpiMap = dynamic(
   () => import("@/components/swahiliexpi/map/SwahiliExpiMap"),
@@ -35,7 +42,11 @@ export default function MapExperience({
 }) {
   const router = useRouter();
   const notify = useNotification();
-
+  const user = useAuthStore((state) => state.user);
+  const recentEventIdsString = recentEventStore((state) =>
+    state.recentEventIds.join(","),
+  );
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [sharedModeActive, setSharedModeActive] = useState(mode === "shared");
 
   const [sharedEvent, setSharedEvent] = useState(null);
@@ -65,9 +76,10 @@ export default function MapExperience({
 
   const [drawerCategory, setDrawerCategory] = useState(null);
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("explore");
-  const [activeNavigation, setActiveNavigation] = useState("explore");
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeNavigation, setActiveNavigation] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [markerMove, setMarkerMove] = useState(false);
 
   const [subcategories, setSubcategories] = useState([]);
 
@@ -78,6 +90,7 @@ export default function MapExperience({
   const [filterValues, setFilterValues] = useState({});
 
   const [categoryDrawerOpen, setCategoryDrawerOpen] = useState(false);
+  const [navigationDrawerOpen, setNavigationDrawerOpen] = useState(false);
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -210,6 +223,14 @@ export default function MapExperience({
       return;
     }
 
+    if (navigationDrawerOpen) {
+      return;
+    }
+
+    if (markerMove) {
+      return;
+    }
+
     if (!mapViewport.bbox || !mapViewport.zoom) {
       return;
     }
@@ -279,13 +300,7 @@ export default function MapExperience({
     };
 
     fetchLocations();
-  }, [
-    mapViewport,
-    index,
-    drawerCategory,
-    subcategoryId,
-    sharedModeActive,
-  ]);
+  }, [mapViewport, index, drawerCategory, subcategoryId, sharedModeActive]);
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -296,6 +311,7 @@ export default function MapExperience({
       }
 
       setSubcategoriesLoading(true);
+      setMarkerMove(false);
 
       try {
         const response = await loadDictionaryParent(12, drawerCategory?.id);
@@ -332,21 +348,104 @@ export default function MapExperience({
     fetchSubCategories();
   }, [drawerCategory]);
 
-  const handleCategoryChange = (category) => {
-    if (category === "explore") {
-      setCategoryDrawerOpen(false);
-      setDrawerCategory(null);
-      setActiveCategory("explore");
-      setSubcategoryId(null);
-
+  useEffect(() => {
+    if (!navigationDrawerOpen) {
       return;
     }
 
+    if (!activeNavigation) {
+      return;
+    }
+
+    if (activeNavigation?.key === "bookmarks" && !isAuthenticated) {
+      setTimeout(() => {
+        notify.error("Error", "You must be authenticated to view bookmarks.");
+        setNavigationDrawerOpen(false);
+        setIndex((prev) => prev + 1);
+      }, 0);
+      return;
+    }
+
+    setTimeout(() => {
+      setLocations([]);
+    }, 0);
+
+    const fetchLocations = async () => {
+      setLocationsLoading(true);
+
+      try {
+        const response = await loadNavigationEventMap({
+          search,
+          bookmarked_only:
+            activeNavigation?.key === "bookmarks" ? true : undefined,
+          user_id: isAuthenticated ? user?.id : undefined,
+          is_featured: activeNavigation?.key === "featured" ? true : undefined,
+          is_trending: activeNavigation?.key === "trending" ? true : undefined,
+          entity_ids:
+            activeNavigation?.key === "recent"
+              ? recentEventIdsString
+              : undefined,
+          offset: 0,
+          limit: 500,
+        });
+
+        setLocations(response?.results || []);
+
+        setHasLoadedLocations(true);
+
+        setLocationsPagination({
+          totalCount: response?.total_count || 0,
+          count: response?.count || 0,
+          limit: response?.limit || 500,
+          offset: response?.offset || 0,
+          hasMore: response?.has_more || false,
+        });
+      } catch (error) {
+        const responseData = error?.response?.data;
+
+        let errorMessage = "Something went wrong. Please try again.";
+
+        if (typeof responseData === "string") {
+          errorMessage = responseData;
+        } else if (responseData?.error) {
+          errorMessage = responseData.error;
+        } else if (responseData?.detail) {
+          errorMessage = responseData.detail;
+        } else if (responseData?.message) {
+          errorMessage = responseData.message;
+        } else if (responseData && typeof responseData === "object") {
+          const firstKey = Object.keys(responseData)[0];
+          const firstError = responseData[firstKey];
+
+          if (Array.isArray(firstError)) {
+            errorMessage = `${firstError[0]}`;
+          }
+        }
+
+        notify.error("Failed to load locations", errorMessage);
+      } finally {
+        setLocationsLoading(false);
+      }
+    };
+
+    fetchLocations();
+  }, [navigationDrawerOpen, activeNavigation, index]);
+
+  const handleCategoryChange = (category) => {
     setActiveCategory(category);
-
     setDrawerCategory(category);
-
     setCategoryDrawerOpen(true);
+    setNavigationDrawerOpen(false);
+    setMarkerMove(false);
+  };
+
+  const handleNavigationDrawerChange = (item) => {
+    setActiveCategory(null);
+    setDrawerCategory(null);
+    setCategoryDrawerOpen(false);
+    setNavigationDrawerOpen(true);
+    setActiveNavigation(item);
+    setMarkerMove(false);
   };
 
   const handleCategoryDrawerClose = () => {
@@ -354,16 +453,23 @@ export default function MapExperience({
 
     setDrawerCategory(null);
 
-    setActiveCategory("explore");
+    setActiveCategory(null);
 
     setSubcategoryId(null);
 
     setSubcategories([]);
 
     setFilterValues({});
+    setMarkerMove(false);
+  };
+
+  const handleNavigationDrawerClose = () => {
+    setNavigationDrawerOpen(false);
+    setMarkerMove(false);
   };
 
   const handleFilterChange = (key, value) => {
+    setMarkerMove(false);
     setFilterValues((previous) => ({
       ...previous,
       [key]: value,
@@ -430,6 +536,7 @@ export default function MapExperience({
 
   const handlePlaceSelect = async (place) => {
     setSelectedPlace(place);
+    setMarkerMove(false);
 
     try {
       if (place?.entity_id) {
@@ -442,6 +549,7 @@ export default function MapExperience({
 
   const handlePlaceDetailsClose = () => {
     setSelectedPlace(null);
+    setMarkerMove(false);
 
     if (sharedModeActive) {
       setSharedModeActive(false);
@@ -488,6 +596,7 @@ export default function MapExperience({
 
   const handleSearchClear = () => {
     setSearch("");
+    setMarkerMove(false);
 
     setHasLoadedLocations(false);
 
@@ -496,15 +605,13 @@ export default function MapExperience({
 
   const handleSearch = () => {
     setHasLoadedLocations(false);
+    setMarkerMove(false);
 
     setIndex((previous) => previous + 1);
   };
 
   const handleBrandClick = () => {
-    setActiveCategory("explore");
-
-    setActiveNavigation("explore");
-
+    setActiveCategory(null);
     setSearch("");
   };
 
@@ -539,6 +646,7 @@ export default function MapExperience({
         currentLocation={currentLocation}
         activeCategory={activeCategory}
         categoryDrawerOpen={categoryDrawerOpen}
+        navigationDrawerOpen={navigationDrawerOpen}
         search={search}
         onPlaceSelect={handlePlaceSelect}
         locations={mapLocations}
@@ -584,12 +692,13 @@ export default function MapExperience({
         activeCategory={activeCategory}
         onCategoryChange={handleCategoryChange}
         categoryDrawerOpen={categoryDrawerOpen}
+        navigationDrawerOpen={navigationDrawerOpen}
         onBrandClick={handleBrandClick}
         menuOpen={menuOpen}
         onMenu={() => setMenuOpen(true)}
         onMenuClose={() => setMenuOpen(false)}
         onMenuNavigate={(item) => {
-          console.log("Navigate:", item);
+          handleNavigationDrawerChange(item);
         }}
         onSaved={() => {
           console.log("Saved");
@@ -620,6 +729,29 @@ export default function MapExperience({
           setSelectedPlace(place);
         }}
         hoveredPlace={hoveredPlace}
+        onPlaceHover={(place) => {
+          setHoveredPlace(place);
+          setMarkerMove(true);
+        }}
+        search={search}
+        onSearchChange={setSearch}
+        onSearchClear={handleSearchClear}
+        onSearch={handleSearch}
+      />
+
+      <NavigationDrawer
+        open={navigationDrawerOpen}
+        navigation={activeNavigation}
+        locations={locations}
+        pagination={locationsPagination}
+        loadingLocation={locationsLoading}
+        loadingMore={loadingMoreLocations}
+        onLoadMore={loadMoreLocations}
+        onClose={handleNavigationDrawerClose}
+        onPlaceSelect={(place) => {
+          setSelectedPlace(place);
+        }}
+        hoveredPlace={hoveredPlace}
         onPlaceHover={setHoveredPlace}
         search={search}
         onSearchChange={setSearch}
@@ -631,6 +763,7 @@ export default function MapExperience({
         place={selectedPlace}
         open={!!selectedPlace}
         categoryDrawerOpen={categoryDrawerOpen}
+        navigationDrawerOpen={navigationDrawerOpen}
         onClose={handlePlaceDetailsClose}
         setLoadingDetails={setLoadingDetails}
         loadingDetails={loadingDetails}

@@ -14,8 +14,6 @@ import { Image } from "antd";
 export default function MapPopup({ place }) {
   if (!place) return null;
 
-  console.log(place);
-
   return (
     <div className="sw-map-popup">
       <div className="sw-popup-image">

@@ -34,6 +34,7 @@ export default function SwahiliExpiMap({
   onViewportChange,
   currentLocation = null,
   categoryDrawerOpen,
+  navigationDrawerOpen,
   onPlaceSelect,
   hoveredPlace,
 }) {
@@ -61,6 +62,7 @@ export default function SwahiliExpiMap({
 
         <MapViewMemory
           categoryDrawerOpen={categoryDrawerOpen}
+          navigationDrawerOpen={navigationDrawerOpen}
           saveViewRef={saveViewRef}
         />
 
@@ -162,11 +164,11 @@ function HoveredPlaceController({ hoveredPlace }) {
   return null;
 }
 
-function MapViewMemory({ categoryDrawerOpen, saveViewRef }) {
+function MapViewMemory({ categoryDrawerOpen, navigationDrawerOpen, saveViewRef }) {
   const map = require("react-leaflet").useMap();
 
   useEffect(() => {
-    if (categoryDrawerOpen) {
+    if (categoryDrawerOpen || navigationDrawerOpen) {
       const center = map.getCenter();
 
       saveViewRef.current = {
@@ -187,7 +189,7 @@ function MapViewMemory({ categoryDrawerOpen, saveViewRef }) {
     });
 
     saveViewRef.current = null;
-  }, [categoryDrawerOpen, map, saveViewRef]);
+  }, [categoryDrawerOpen, navigationDrawerOpen, map, saveViewRef]);
 
   return null;
 }

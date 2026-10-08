@@ -79,9 +79,9 @@ function createPlaceIcon(category, title) {
       </div>
     `,
 
-    iconSize: [210, 40],
-    iconAnchor: [105, 40],
-    popupAnchor: [0, -30],
+    iconSize: [28, 36],
+    iconAnchor: [14, 40],
+    popupAnchor: [12, -34],
   });
 }
 
@@ -91,8 +91,24 @@ export default function MapMarkers({
   hoveredPlace,
 }) {
   const markerRefs = useRef({});
+  const hoverTimerRef = useRef(null);
+
+  // Clear timer when component unmounts
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current) {
+        clearTimeout(hoverTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
+    // Always clear pending hover timer
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+
     if (hoveredPlace) {
       const marker = markerRefs.current[hoveredPlace.entity_id];
 
@@ -108,6 +124,12 @@ export default function MapMarkers({
     });
   }, [hoveredPlace]);
 
+  const closeAllPopups = () => {
+    Object.values(markerRefs.current).forEach((marker) => {
+      marker?.closePopup();
+    });
+  };
+
   return (
     <>
       {locations?.map((place) => (
@@ -115,19 +137,43 @@ export default function MapMarkers({
           key={place.entity_id}
           position={[place.latitude, place.longitude]}
           ref={(marker) => {
-            markerRefs.current[place.entity_id] = marker;
+            if (marker) {
+              markerRefs.current[place.entity_id] = marker;
+            }
           }}
           icon={createPlaceIcon(place.category_name, place.title)}
           eventHandlers={{
             mouseover: (event) => {
-              event.target.openPopup();
+              const marker = event.target;
+
+              // Cancel previous marker's pending popup
+              if (hoverTimerRef.current) {
+                clearTimeout(hoverTimerRef.current);
+              }
+
+              // Close any popup currently open
+              closeAllPopups();
+
+              // Delay opening
+              hoverTimerRef.current = setTimeout(() => {
+                marker.openPopup();
+                hoverTimerRef.current = null;
+              }, 180);
             },
 
             mouseout: (event) => {
               const marker = event.target;
 
+              // Cancel popup that has not opened yet
+              if (hoverTimerRef.current) {
+                clearTimeout(hoverTimerRef.current);
+                hoverTimerRef.current = null;
+              }
+
+              // Give the mouse a little time to move into the popup
               setTimeout(() => {
                 const popup = marker.getPopup();
+
                 if (!popup) return;
 
                 const popupElement = popup.getElement();
@@ -137,14 +183,20 @@ export default function MapMarkers({
                 }
 
                 marker.closePopup();
-              }, 200);
+              }, 150);
             },
 
             click: (event) => {
-              // Close the small hover popup
+              // Cancel hover popup timer
+              if (hoverTimerRef.current) {
+                clearTimeout(hoverTimerRef.current);
+                hoverTimerRef.current = null;
+              }
+
+              // Close small popup
               event.target.closePopup();
 
-              // Open the full details card
+              // Open full details
               onPlaceSelect?.(place);
             },
           }}

@@ -24,6 +24,7 @@ export default function MapHeader({
   onSaved,
   onSignIn,
   categoryDrawerOpen = false,
+  navigationDrawerOpen = false,
   menuOpen,
   onMenu,
   onMenuClose,
@@ -38,6 +39,8 @@ export default function MapHeader({
   const handleMobileSearchToggle = () => {
     setMobileSearchOpen((prev) => !prev);
   };
+  
+  
 
   return (
     <header
@@ -48,7 +51,7 @@ export default function MapHeader({
       {/* Brand */}
       <Brand onClick={onBrandClick} onMenu={onMenu} />
 
-      {!categoryDrawerOpen && (
+      {!categoryDrawerOpen && !navigationDrawerOpen && (
         <SearchBar
           value={search}
           onChange={onSearchChange}
@@ -62,10 +65,10 @@ export default function MapHeader({
       {/* CENTER */}
       <div
         className={`sw-map-header-center ${
-          categoryDrawerOpen ? "filters-active" : ""
+          categoryDrawerOpen || navigationDrawerOpen ? "filters-active" : ""
         }`}
       >
-        {!categoryDrawerOpen ? (
+        {!categoryDrawerOpen && !navigationDrawerOpen ? (
           <div className="sw-category-wrapper">
             <CategoryBar
               categories={categories}

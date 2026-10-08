@@ -40,6 +40,7 @@ import {
   postLike,
   postReview,
 } from "@/services/engagement/engagementService";
+import recentEventStore from "@/stores/recentEventStore";
 
 const EMPTY_ARRAY = [];
 
@@ -198,6 +199,7 @@ export default function PlaceDetailsCard({
   place,
   open = false,
   categoryDrawerOpen = false,
+  navigationDrawerOpen = false,
   onClose,
   setLoadingDetails,
   loadingDetails,
@@ -223,6 +225,7 @@ export default function PlaceDetailsCard({
   const [reviewComment, setReviewComment] = useState("");
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [index, setIndex] = useState(0);
+  const addRecentEvent = recentEventStore((state) => state.addRecentEvent);
 
   useEffect(() => {
     if (!open || !place?.entity_id) {
@@ -237,11 +240,12 @@ export default function PlaceDetailsCard({
       setError(false);
       setData(null);
       setActiveTab("overview");
+      addRecentEvent(place?.entity_id);
 
       try {
         const response = await loadEventFullData({
           dataId: place.entity_id,
-          userId: user.id,
+          userId: user ? user.id : null,
         });
 
         if (!cancelled) {
@@ -435,7 +439,7 @@ export default function PlaceDetailsCard({
     <>
       <aside
         className={`sw-place-details-card ${
-          categoryDrawerOpen
+          categoryDrawerOpen || navigationDrawerOpen
             ? "sw-place-details-card--drawer-open"
             : "sw-place-details-card--drawer-closed"
         }`}
