@@ -243,7 +243,7 @@ export default function MapExperience({
 
       const shouldShowLoading = !hasLoadedLocations || isFilterChange;
 
-      if (shouldShowLoading) {
+      if (shouldShowLoading && locations.length === 0) {
         setLocationsLoading(true);
       }
 
@@ -265,7 +265,7 @@ export default function MapExperience({
         setLocationsPagination({
           totalCount: response?.total_count || 0,
           count: response?.count || 0,
-          limit: response?.limit || 500,
+          limit: response?.limit || 50,
           offset: response?.offset || 0,
           hasMore: response?.has_more || false,
         });
@@ -301,6 +301,7 @@ export default function MapExperience({
 
     fetchLocations();
   }, [mapViewport, index, drawerCategory, subcategoryId, sharedModeActive]);
+
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -396,7 +397,7 @@ export default function MapExperience({
         setLocationsPagination({
           totalCount: response?.total_count || 0,
           count: response?.count || 0,
-          limit: response?.limit || 500,
+          limit: response?.limit || 50,
           offset: response?.offset || 0,
           hasMore: response?.has_more || false,
         });
