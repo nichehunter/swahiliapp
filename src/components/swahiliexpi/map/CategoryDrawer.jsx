@@ -196,15 +196,15 @@ export default function CategoryDrawer({
                   <h3>{toSmartTitleCase(place.title)}</h3>
 
                   <span className="sw-category-place-type">
-                    {toSmartTitleCase(place.sub_category_name)}
+                    {toSmartTitleCase(place.category_name)}
                   </span>
 
                   <div className="sw-category-place-rating">
                     <StarFilled />
 
-                    <strong>4.5</strong>
+                    <strong>{fNumberDoublePoint(place.average_rating)}</strong>
 
-                    <span>(125)</span>
+                    <span>({fNumber(place.total_reviews)})</span>
                   </div>
                 </div>
               </button>
