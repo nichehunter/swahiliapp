@@ -1,4 +1,4 @@
-import coreApi from "@/libs/axios/core";
+import gatewayApi from "@/libs/axios/gateway";
 
 // =========================================================
 // event loading functions
@@ -26,7 +26,7 @@ export const loadEventMap = async ({
   if (subcategoryId) params.append("sub_category_id", subcategoryId);
   if (search) params.append("search", search);
 
-  const response = await coreApi.get(`/event/map?${params.toString()}`);
+  const response = await gatewayApi.get(`/event/map?${params.toString()}`);
 
   return response.data;
 };
@@ -39,7 +39,19 @@ export const loadEventFullData = async ({ dataId, userId }) => {
 
   if (userId) params.append("user_id", userId);
 
-  const response = await coreApi.get(
+  const response = await gatewayApi.get(
+    `/event/data/${dataId}?${params.toString()}`,
+  );
+
+  return response.data;
+};
+
+export const loadEventShared = async ({ dataId, userId }) => {
+  const params = new URLSearchParams();
+
+  if (userId) params.append("user_id", userId);
+
+  const response = await gatewayApi.get(
     `/event/data/${dataId}?${params.toString()}`,
   );
 

@@ -87,7 +87,6 @@ function createPlaceIcon(category, title) {
 
 export default function MapMarkers({
   locations = [],
-  activeCategory = "explore",
   onPlaceSelect,
   hoveredPlace,
 }) {

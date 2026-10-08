@@ -1,6 +1,7 @@
 "use client";
 
 import { toSmartTitleCase } from "@/libs/utils/char";
+import { fNumberPoint, fNumber } from "@/libs/utils/number";
 
 import {
   StarFilled,
@@ -12,6 +13,8 @@ import { Image } from "antd";
 
 export default function MapPopup({ place }) {
   if (!place) return null;
+
+  console.log(place);
 
   return (
     <div className="sw-map-popup">
@@ -33,13 +36,13 @@ export default function MapPopup({ place }) {
 
             <div className="sw-popup-rating">
               <StarFilled />
-              <strong>{"4.5"}</strong>
+              <strong>{fNumberPoint(place.average_rating)}</strong>
 
-              {<span>(120 reviews)</span>}
+              {<span>({fNumber(place.total_reviews)})</span>}
             </div>
           </div>
 
-          <div className="sw-popup-actions">
+          {/* <div className="sw-popup-actions">
             <button
               type="button"
               className="sw-popup-action"
@@ -66,7 +69,7 @@ export default function MapPopup({ place }) {
             >
               <HeartOutlined />
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

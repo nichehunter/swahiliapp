@@ -1,0 +1,32 @@
+.sw-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sw-header-button {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid #dce5ef;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #071a3d;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sw-header-button:hover {
+  border-color: #0077b6;
+  color: #0077b6;
+  background: #f5faff;
+}
+
+.sw-header-button .anticon {
+  font-size: 17px;
+}

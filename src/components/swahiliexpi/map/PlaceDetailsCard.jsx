@@ -16,22 +16,30 @@ import {
   InfoCircleOutlined,
   CheckCircleFilled,
   ClockCircleOutlined,
-  SafetyCertificateOutlined,
-  CarOutlined,
-  WifiOutlined,
-  MedicineBoxOutlined,
-  LockOutlined,
-  ShopOutlined,
-  DownOutlined,
   PictureOutlined,
+  ShareAltOutlined,
+  WhatsAppOutlined,
+  FacebookFilled,
+  TwitterOutlined,
+  SendOutlined,
+  MailOutlined,
+  XOutlined,
+  LinkedinFilled,
+  LinkOutlined,
 } from "@ant-design/icons";
-import { Image, Skeleton } from "antd";
+import { Image, Skeleton, Modal, message, Input, Button, Rate } from "antd";
 
 import {
   loadEventDetail,
   loadEventFullData,
-} from "@/services/core/eventService";
+} from "@/services/gateway/eventService";
 import { PlaceImageGallery } from "./PlaceImageGallery";
+import { useAuthStore } from "@/stores/authStore";
+import {
+  postBookmark,
+  postLike,
+  postReview,
+} from "@/services/engagement/engagementService";
 
 const EMPTY_ARRAY = [];
 
@@ -193,6 +201,7 @@ export default function PlaceDetailsCard({
   onClose,
   setLoadingDetails,
   loadingDetails,
+  setAuthModalOpen,
 }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [data, setData] = useState(null);
@@ -203,6 +212,17 @@ export default function PlaceDetailsCard({
     setGalleryIndex(index);
     setGalleryOpen(true);
   };
+  const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareOptions, setShareOptions] = useState([]);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     if (!open || !place?.entity_id) {
@@ -219,7 +239,10 @@ export default function PlaceDetailsCard({
       setActiveTab("overview");
 
       try {
-        const response = await loadEventFullData({ dataId: place.entity_id });
+        const response = await loadEventFullData({
+          dataId: place.entity_id,
+          userId: user.id,
+        });
 
         if (!cancelled) {
           setData(response?.data || response || null);
@@ -241,12 +264,172 @@ export default function PlaceDetailsCard({
     return () => {
       cancelled = true;
     };
-  }, [open, place]);
+  }, [open, place, index]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (data) {
+        setIsLiked(Boolean(data.is_liked));
+        setIsBookmarked(Boolean(data.is_bookmarked));
+      }
+    }, 0);
+  }, [data]);
 
   if (!open || !place) {
     setTimeout(() => setData(null), 0);
     return null;
   }
+
+  const handleLike = async () => {
+    if (!isAuthenticated) {
+      setAuthModalOpen(true);
+      return;
+    }
+
+    const previousValue = isLiked;
+    setIsLiked(!previousValue);
+    try {
+      await postLike({
+        user_id: user.id,
+        user_name: user.first_name,
+        entity: place.entity_id,
+      });
+    } catch (error) {
+      setIsLiked(previousValue);
+    }
+  };
+
+  const handleBookmark = async () => {
+    if (!isAuthenticated) {
+      setAuthModalOpen(true);
+      return;
+    }
+
+    const previousValue = isBookmarked;
+    setIsBookmarked(!previousValue);
+    try {
+      await postBookmark({
+        user_id: user.id,
+        user_name: user.first_name,
+        entity: place.entity_id,
+      });
+    } catch (error) {
+      setIsBookmarked(previousValue);
+    }
+  };
+
+  const handleReview = () => {
+    if (!isAuthenticated) {
+      setAuthModalOpen(true);
+      return;
+    }
+
+    setReviewRating(0);
+    setReviewComment("");
+    setReviewModalOpen(true);
+  };
+
+  const handleShare = () => {
+    const url = `${window.location.origin}/events/${data.slug}`;
+    const title = data?.title || "SwahiliExpi";
+
+    const shareOptions = [
+      {
+        name: "WhatsApp",
+        type: "whatsapp",
+        icon: <WhatsAppOutlined />,
+        url: `https://wa.me/?text=${encodeURIComponent(`${title}\n${url}`)}`,
+      },
+      {
+        name: "Facebook",
+        type: "facebook",
+        icon: <FacebookFilled />,
+        url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      },
+      {
+        name: "Telegram",
+        type: "telegram",
+        icon: <SendOutlined />,
+        url: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+      },
+      {
+        name: "X",
+        type: "x",
+        icon: <XOutlined />,
+        url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+      },
+      {
+        name: "LinkedIn",
+        type: "linkedin",
+        icon: <LinkedinFilled />,
+        url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
+      },
+      {
+        name: "Email",
+        type: "email",
+        icon: <MailOutlined />,
+        url: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`,
+      },
+      {
+        name: "Copy Link",
+        type: "copy",
+        icon: <LinkOutlined />,
+      },
+    ];
+
+    setShareOptions(shareOptions);
+    setShareModalOpen(true);
+  };
+
+  const handleSubmitReview = async () => {
+    const comment = reviewComment.trim();
+
+    if (!reviewRating) {
+      message.warning("Please select a rating");
+      return;
+    }
+
+    if (!comment) {
+      message.warning("Please write a review");
+      return;
+    }
+
+    if (!place?.entity_id) {
+      return;
+    }
+
+    setReviewSubmitting(true);
+
+    const payload = {
+      user_id: user.id,
+      user_name: user.first_name,
+      entity: place.entity_id,
+      rating: reviewRating,
+      comment,
+    };
+
+    try {
+      await postReview(payload);
+
+      message.success("Review submitted successfully");
+
+      setReviewModalOpen(false);
+      setReviewRating(0);
+      setReviewComment("");
+
+      setIndex((prev) => prev + 1);
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+
+      message.error(
+        error?.response?.data?.detail ||
+          error?.response?.data?.message ||
+          "Failed to submit review. Please try again.",
+      );
+    } finally {
+      setReviewSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -268,6 +451,12 @@ export default function PlaceDetailsCard({
             setActiveTab={setActiveTab}
             onClose={onClose}
             setGalleryOpen={setGalleryOpen}
+            onLike={handleLike}
+            onBookmark={handleBookmark}
+            onShare={handleShare}
+            onComment={handleReview}
+            isLiked={isLiked}
+            isBookmarked={isBookmarked}
           />
         )}
       </aside>
@@ -278,6 +467,22 @@ export default function PlaceDetailsCard({
         title={data?.title || "Place"}
         onClose={() => setGalleryOpen(false)}
         onChange={setGalleryIndex}
+      />
+      <SharedSection
+        shareModalOpen={shareModalOpen}
+        setShareModalOpen={setShareModalOpen}
+        shareOptions={shareOptions}
+        data={data}
+      />
+      <ReviewSection
+        reviewModalOpen={reviewModalOpen}
+        setReviewModalOpen={setReviewModalOpen}
+        reviewRating={reviewRating}
+        setReviewRating={setReviewRating}
+        reviewComment={reviewComment}
+        setReviewComment={setReviewComment}
+        reviewSubmitting={reviewSubmitting}
+        handleSubmitReview={handleSubmitReview}
       />
     </>
   );
@@ -379,6 +584,12 @@ function LoadedDetails({
   setActiveTab,
   onClose,
   setGalleryOpen,
+  onLike,
+  onBookmark,
+  onShare,
+  onComment,
+  isLiked,
+  isBookmarked,
 }) {
   if (!data) {
     return (
@@ -473,20 +684,70 @@ function LoadedDetails({
           )}
         </div>
 
-        <div className="sw-place-details-category-row">
-          {data.category_name && (
-            <span className="sw-place-category">{data.category_name}</span>
-          )}
+        <div className="sw-place-details-category-actions">
+          <div className="sw-place-details-category-row">
+            {data.category_name && (
+              <span className="sw-place-category">{data.category_name}</span>
+            )}
 
-          {data.sub_category_name && (
-            <>
-              <span className="sw-place-category-separator">•</span>
+            {data.sub_category_name && (
+              <>
+                <span className="sw-place-category-separator">•</span>
 
-              <span className="sw-place-subcategory">
-                {data.sub_category_name}
-              </span>
-            </>
-          )}
+                <span className="sw-place-subcategory">
+                  {data.sub_category_name}
+                </span>
+              </>
+            )}
+          </div>
+
+          <div className="sw-place-details-actions">
+            <button
+              type="button"
+              className={`sw-place-action ${isLiked ? "active-like" : ""}`}
+              title={isLiked ? "Unlike" : "Like"}
+              aria-label={isLiked ? "Unlike event" : "Like event"}
+              onClick={onLike}
+            >
+              {isLiked ? <HeartFilled /> : <HeartOutlined />}
+            </button>
+
+            <button
+              type="button"
+              className="sw-place-action"
+              title="Share"
+              aria-label="Share event"
+              onClick={onShare}
+            >
+              <ShareAltOutlined />
+            </button>
+
+            <button
+              type="button"
+              className={`sw-place-action ${
+                isBookmarked ? "active-bookmark" : ""
+              }`}
+              title={isBookmarked ? "Remove bookmark" : "Bookmark"}
+              aria-label={isBookmarked ? "Remove bookmark" : "Bookmark event"}
+              onClick={onBookmark}
+            >
+              {isBookmarked ? (
+                <i className="bi bi-bookmark-fill" />
+              ) : (
+                <i className="bi bi-bookmark" />
+              )}
+            </button>
+
+            <button
+              type="button"
+              className="sw-place-action"
+              title="Write a review"
+              aria-label="Write a review"
+              onClick={onComment}
+            >
+              <i className="bi bi-chat" />
+            </button>
+          </div>
         </div>
 
         {/* =====================================================
@@ -507,20 +768,20 @@ function LoadedDetails({
             <span>{formatNumber(statistics.view_count)}</span>
           </div>
 
-          <div
-            className={`sw-place-stat ${data.is_liked ? "active-like" : ""}`}
-          >
-            {data.is_liked ? <HeartFilled /> : <HeartOutlined />}
+          <div className={`sw-place-stat ${isLiked ? "active-like" : ""}`}>
+            {isLiked ? <HeartFilled /> : <HeartOutlined />}
 
             <span>{formatNumber(statistics.like_count)}</span>
           </div>
 
           <div
-            className={`sw-place-stat ${
-              data.is_bookmarked ? "active-bookmark" : ""
-            }`}
+            className={`sw-place-stat ${isBookmarked ? "active-bookmark" : ""}`}
           >
-            {data.is_bookmarked ? <CheckCircleFilled /> : <CheckCircleFilled />}
+            {isBookmarked ? (
+              <i className="bi bi-bookmark-fill" />
+            ) : (
+              <i className="bi bi-bookmark" />
+            )}
 
             <span>{formatNumber(statistics.bookmark_count)}</span>
           </div>
@@ -990,5 +1251,157 @@ function EmptySection({ message }) {
       <InfoCircleOutlined />
       <span>{message}</span>
     </div>
+  );
+}
+
+/* =========================================================
+   SHARED
+========================================================= */
+function SharedSection({
+  shareModalOpen,
+  setShareModalOpen,
+  shareOptions,
+  data,
+}) {
+  return (
+    <>
+      <Modal
+        open={shareModalOpen}
+        onCancel={() => setShareModalOpen(false)}
+        footer={null}
+        centered
+        title="Share this event"
+        width={380}
+        className="sw-share-modal"
+      >
+        <div className="sw-share-options">
+          {shareOptions.map((option) => (
+            <button
+              key={option.name}
+              type="button"
+              className={`sw-share-option sw-share-${option.type}`}
+              onClick={async () => {
+                if (option.type === "copy") {
+                  try {
+                    await navigator.clipboard.writeText(
+                      `${window.location.origin}/events/${data.slug}`,
+                    );
+
+                    message.success("Link copied to clipboard");
+                  } catch (error) {
+                    message.error("Failed to copy link");
+                  }
+
+                  setShareModalOpen(false);
+                  return;
+                }
+
+                window.open(
+                  option.url,
+                  "_blank",
+                  "noopener,noreferrer,width=600,height=600",
+                );
+
+                setShareModalOpen(false);
+              }}
+            >
+              <span className="sw-share-option-icon">{option.icon}</span>
+
+              <span className="sw-share-option-name">{option.name}</span>
+            </button>
+          ))}
+        </div>
+      </Modal>
+    </>
+  );
+}
+
+function ReviewSection({
+  reviewModalOpen,
+  setReviewModalOpen,
+  reviewRating,
+  setReviewRating,
+  reviewComment,
+  setReviewComment,
+  reviewSubmitting,
+  handleSubmitReview,
+}) {
+  return (
+    <>
+      <Modal
+        open={reviewModalOpen}
+        onCancel={() => {
+          if (!reviewSubmitting) {
+            setReviewModalOpen(false);
+          }
+        }}
+        footer={null}
+        centered
+        title="Write a review"
+        mask={{
+          closable: !reviewSubmitting,
+        }}
+      >
+        <div className="sw-review-form">
+          <div className="sw-review-rating">
+            <div className="sw-review-label">
+              How would you rate this place?
+            </div>
+
+            <Rate
+              value={reviewRating}
+              onChange={setReviewRating}
+              disabled={reviewSubmitting}
+            />
+
+            <span className="sw-review-rating-text">
+              {reviewRating === 0
+                ? "Select a rating"
+                : reviewRating === 1
+                  ? "Poor"
+                  : reviewRating === 2
+                    ? "Fair"
+                    : reviewRating === 3
+                      ? "Good"
+                      : reviewRating === 4
+                        ? "Very good"
+                        : "Excellent"}
+            </span>
+          </div>
+
+          <div className="sw-review-comment">
+            <div className="sw-review-label">Tell us about your experience</div>
+
+            <Input.TextArea
+              value={reviewComment}
+              onChange={(event) => setReviewComment(event.target.value)}
+              placeholder="What did you like? What could be improved?"
+              rows={5}
+              maxLength={1000}
+              showCount
+              disabled={reviewSubmitting}
+            />
+          </div>
+
+          <div className="sw-review-actions">
+            <Button
+              onClick={() => setReviewModalOpen(false)}
+              disabled={reviewSubmitting}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              type="primary"
+              loading={reviewSubmitting}
+              disabled={!reviewRating || !reviewComment.trim()}
+              onClick={handleSubmitReview}
+            >
+              Submit Review
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 }

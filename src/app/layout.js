@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "@/styles/common/notification.css";
 import "@/styles/common/skeleton.css";
+import "@/styles/utils.css";
 
 import { NotificationProvider } from "@/components/common/notification/NotificationProvider";
 

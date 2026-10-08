@@ -2185,3 +2185,171 @@
     display: flex !important;
   }
 }
+
+/* =========================================
+   DRAWER FOOTER
+========================================= */
+
+.sw-drawer-footer {
+  padding: 14px 16px 18px;
+  border-top: 1px solid #edf1f5;
+  background: #ffffff;
+}
+
+.sw-drawer-footer-text {
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* =========================================
+   GUEST SIGN IN
+========================================= */
+
+.sw-drawer-signin {
+  width: 100%;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 0;
+  border-radius: 10px;
+  background: #0077b6;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sw-drawer-signin:hover {
+  background: #005f8a;
+  box-shadow: 0 5px 14px rgba(0, 119, 182, 0.18);
+}
+
+.sw-drawer-signin:active {
+  transform: translateY(1px);
+}
+
+/* =========================================
+   AUTHENTICATED ACCOUNT
+========================================= */
+
+.sw-drawer-account {
+  width: 100%;
+}
+
+.sw-drawer-account-profile {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 10px;
+  border: 1px solid #e8edf3;
+  border-radius: 11px;
+  background: #f8fafc;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sw-drawer-account-profile:hover {
+  background: #f1f7fa;
+  border-color: #cfe6ef;
+}
+
+.sw-drawer-account-avatar {
+  flex: 0 0 auto;
+  background: #0077b6;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sw-drawer-account-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sw-drawer-account-info strong {
+  overflow: hidden;
+  color: #071a3d;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sw-drawer-account-info small {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.sw-drawer-account-arrow {
+  flex: 0 0 auto;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* =========================================
+   ACCOUNT ACTIONS
+========================================= */
+
+.sw-drawer-account-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.sw-drawer-account-actions button {
+  min-width: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid #e8edf3;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.sw-drawer-account-actions button:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #071a3d;
+}
+
+.sw-drawer-account-actions button.logout {
+  color: #dc3545;
+}
+
+.sw-drawer-account-actions button.logout:hover {
+  background: #fff5f5;
+  border-color: #f3c2c2;
+  color: #c82333;
+}

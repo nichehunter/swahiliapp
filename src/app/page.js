@@ -1,4 +1,4 @@
-import Map from "@/pages/map/map";
+import MapExperience from "@/pages/map/map";
 export default function Home() {
-  return <Map />;
+  return <MapExperience mode="normal" />;
 }

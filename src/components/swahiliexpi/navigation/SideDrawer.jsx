@@ -1,13 +1,9 @@
 "use client";
 
-import { toTitleCase } from "@/libs/utils/char";
+import { getFirstWord, getInitials, toTitleCase } from "@/libs/utils/char";
 import {
-  CompassOutlined,
-  CalendarOutlined,
   EnvironmentOutlined,
-  HomeOutlined,
   CoffeeOutlined,
-  CameraOutlined,
   HeartOutlined,
   HistoryOutlined,
   ShoppingOutlined,
@@ -27,8 +23,11 @@ import {
   SmileOutlined,
   ReadOutlined,
 } from "@ant-design/icons";
+import { useAuthStore } from "@/stores/authStore";
+import { Avatar } from "antd";
 import Image from "next/image";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import AuthModal from "@/components/auth/AuthModal";
 
 const CATEGORY_ICONS = {
   sports: TrophyOutlined,
@@ -50,6 +49,19 @@ export default function SideDrawer({
   categories,
   onCategoryChange,
 }) {
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  const handleAuthSuccess = () => {
+    setAuthModalOpen(false);
+  };
+
+  const handleSignIn = () => {
+    setAuthModalOpen(true);
+  };
+
   const menuSections = useMemo(() => {
     const categoryItems = (categories || []).map((category) => {
       const name = category.dictionary_item_name?.trim() || "Category";
@@ -135,6 +147,8 @@ export default function SideDrawer({
       },
     ];
   }, [categories]);
+
+  const displayName = user?.first_name || "Account";
   return (
     <>
       {/* OVERLAY */}
@@ -206,16 +220,91 @@ export default function SideDrawer({
 
         {/* FOOTER */}
         <div className="sw-drawer-footer">
-          <button type="button" className="sw-drawer-signin" onClick={onSignIn}>
-            <LoginOutlined />
-            <span>Sign in / Create account</span>
-          </button>
+          {!isAuthenticated ? (
+            <>
+              <button
+                type="button"
+                className="sw-drawer-signin"
+                onClick={() => {
+                  handleSignIn();
+                  onClose?.();
+                }}
+              >
+                <LoginOutlined />
+                <span>Sign in / Create account</span>
+              </button>
 
-          <div className="sw-drawer-footer-text">
-            Discover Tanzania with SwahiliExpi
-          </div>
+              <div className="sw-drawer-footer-text">
+                Discover Tanzania with SwahiliExpi
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="sw-drawer-account">
+                <button
+                  type="button"
+                  className="sw-drawer-account-profile"
+                  onClick={() => {
+                    onNavigate?.("profile");
+                    onClose?.();
+                  }}
+                >
+                  <Avatar
+                    src={user?.avatar_url}
+                    size={42}
+                    className="sw-drawer-account-avatar"
+                  >
+                    {getInitials(getFirstWord(displayName))}
+                  </Avatar>
+
+                  <span className="sw-drawer-account-info">
+                    <strong>{toTitleCase(getFirstWord(displayName))}</strong>
+                    <small>View your profile</small>
+                  </span>
+
+                  <span className="sw-drawer-account-arrow">
+                    <EnvironmentOutlined />
+                  </span>
+                </button>
+
+                <div className="sw-drawer-account-actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onNavigate?.("settings");
+                      onClose?.();
+                    }}
+                  >
+                    <SettingOutlined />
+                    <span>Account settings</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="logout"
+                    onClick={() => {
+                      logout();
+                      onClose?.();
+                    }}
+                  >
+                    <LoginOutlined />
+                    <span>Sign out</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="sw-drawer-footer-text">
+                Discover Tanzania with SwahiliExpi
+              </div>
+            </>
+          )}
         </div>
       </aside>
+      <AuthModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+      />
     </>
   );
 }

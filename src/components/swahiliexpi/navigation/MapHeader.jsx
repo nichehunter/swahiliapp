@@ -30,6 +30,8 @@ export default function MapHeader({
   onMenuNavigate,
   filterValues,
   onFilterChange,
+  setAuthModalOpen,
+  authModalOpen = false,
 }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
@@ -81,7 +83,13 @@ export default function MapHeader({
 
       {/* Actions */}
       <div className="sw-map-header-actions">
-        <HeaderActions onSaved={onSaved} onSignIn={onSignIn} onMenu={onMenu} />
+        <HeaderActions
+          onSaved={onSaved}
+          onSignIn={onSignIn}
+          onMenu={onMenu}
+          setAuthModalOpen={setAuthModalOpen}
+          authModalOpen={authModalOpen}
+        />
       </div>
 
       <SideDrawer

@@ -379,6 +379,78 @@
   color: #cbd5e1;
 }
 
+.sw-place-details-category-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  min-width: 0;
+}
+
+.sw-place-details-category-actions .sw-place-details-category-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  flex: 1;
+}
+
+.sw-place-details-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.sw-place-action {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid #e4eaf1;
+  border-radius: 8px;
+  background: #fff;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sw-place-action:hover {
+  color: #0077b6;
+  border-color: #48cae4;
+  background: #f0fbff;
+  transform: translateY(-1px);
+}
+
+.sw-place-action.active-like {
+  color: #ef476f;
+  border-color: #f8b8c7;
+  background: #fff3f6;
+}
+
+.sw-place-action.active-bookmark {
+  color: #0077b6;
+  border-color: #9bdff0;
+  background: #eefaff;
+}
+
+.sw-place-action:active {
+  transform: scale(0.94);
+}
+
+.sw-place-action:focus-visible {
+  outline: 2px solid #48cae4;
+  outline-offset: 2px;
+}
+
 /* =========================================================
    STATISTICS
 ========================================================= */
@@ -1318,6 +1390,528 @@
   font-size: 11px;
 }
 
+/* =========================================
+   SHARE MODAL
+========================================= */
+
+.sw-share-modal .ant-modal-content {
+  padding: 20px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(11, 23, 54, 0.16);
+}
+
+.sw-share-modal .ant-modal-header {
+  margin-bottom: 20px;
+  padding: 0;
+  background: transparent;
+}
+
+.sw-share-modal .ant-modal-title {
+  color: #0b1736;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* =========================================
+   SHARE OPTIONS
+========================================= */
+
+.sw-share-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* =========================================
+   SHARE OPTION
+========================================= */
+
+.sw-share-option {
+  --share-color: #0077b6;
+  --share-bg: #f1f8fc;
+  --share-border: #dcecf5;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  min-height: 54px;
+  padding: 9px 11px;
+
+  border: 1px solid #e8edf3;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #172033;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sw-share-option:hover {
+  border-color: var(--share-border);
+  background: var(--share-bg);
+  box-shadow: 0 5px 16px rgba(11, 23, 54, 0.07);
+  transform: translateY(-1px);
+}
+
+.sw-share-option:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 7px rgba(11, 23, 54, 0.05);
+}
+
+/* =========================================
+   ICON
+========================================= */
+
+.sw-share-option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+
+  border-radius: 10px;
+
+  background: var(--share-bg);
+  color: var(--share-color);
+
+  font-size: 18px;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sw-share-option:hover .sw-share-option-icon {
+  background: var(--share-color);
+  color: #ffffff;
+  transform: scale(1.04);
+}
+
+.sw-share-option-name {
+  min-width: 0;
+
+  overflow: hidden;
+
+  color: #172033;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* =========================================
+   WHATSAPP
+========================================= */
+
+.sw-share-whatsapp {
+  --share-color: #25d366;
+  --share-bg: #effcf4;
+  --share-border: #c9f1d8;
+}
+
+/* =========================================
+   FACEBOOK
+========================================= */
+
+.sw-share-facebook {
+  --share-color: #1877f2;
+  --share-bg: #f0f6ff;
+  --share-border: #cfe0fa;
+}
+
+/* =========================================
+   X / TWITTER
+========================================= */
+
+.sw-share-x {
+  --share-color: #000000;
+  --share-bg: #f5f5f5;
+  --share-border: #dddddd;
+}
+
+/* =========================================
+   TELEGRAM
+========================================= */
+
+.sw-share-telegram {
+  --share-color: #229ed9;
+  --share-bg: #eef9fe;
+  --share-border: #c9eaf8;
+}
+
+/* =========================================
+   LINKEDIN
+========================================= */
+
+.sw-share-linkedin {
+  --share-color: #0a66c2;
+  --share-bg: #eff6fd;
+  --share-border: #cbdff3;
+}
+
+/* =========================================
+   EMAIL
+========================================= */
+
+.sw-share-email {
+  --share-color: #ea4335;
+  --share-bg: #fff3f2;
+  --share-border: #f6d3d0;
+}
+
+/* =========================================
+   COPY LINK
+========================================= */
+
+.sw-share-copy {
+  --share-color: #0077b6;
+  --share-bg: #eff9fc;
+  --share-border: #cbeaf2;
+}
+
+/* =========================================
+   INSTAGRAM
+========================================= */
+
+.sw-share-instagram {
+  --share-color: #e1306c;
+  --share-bg: #fff1f6;
+  --share-border: #f5ccdc;
+}
+
+/* =========================================
+   REDDIT
+========================================= */
+
+.sw-share-reddit {
+  --share-color: #ff4500;
+  --share-bg: #fff4ef;
+  --share-border: #ffd7c8;
+}
+
+/* =========================================
+   SMS
+========================================= */
+
+.sw-share-sms {
+  --share-color: #34c759;
+  --share-bg: #f0fbf3;
+  --share-border: #d0efd6;
+}
+
+/* =========================================
+   SYSTEM SHARE
+========================================= */
+
+.sw-share-system {
+  --share-color: #0077b6;
+  --share-bg: #eff8fc;
+  --share-border: #cde9f2;
+}
+
+/* =========================================
+   FOCUS
+========================================= */
+
+.sw-share-option:focus-visible {
+  outline: 2px solid var(--share-color);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   REVIEW MODAL
+   ========================================================= */
+
+.sw-review-form {
+  padding: 4px 0 2px;
+}
+
+/* Rating section */
+
+.sw-review-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 22px;
+  margin-bottom: 20px;
+  background: #f8fafc;
+  border: 1px solid #edf1f5;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.sw-review-label {
+  margin-bottom: 10px;
+  color: #071a3d;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sw-review-rating .ant-rate {
+  display: flex;
+  gap: 6px;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.sw-review-rating .ant-rate-star {
+  margin-inline-end: 0;
+}
+
+.sw-review-rating .ant-rate-star:not(.ant-rate-star-full) {
+  color: #cbd5e1;
+}
+
+.sw-review-rating-text {
+  min-height: 20px;
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Comment section */
+
+.sw-review-comment {
+  margin-bottom: 22px;
+}
+
+.sw-review-comment .sw-review-label {
+  margin-bottom: 8px;
+}
+
+.sw-review-comment .ant-input {
+  min-height: 120px;
+  padding: 12px 13px;
+  color: #172033;
+  font-size: 14px;
+  line-height: 1.6;
+  background: #fff;
+  border: 1px solid #dce3eb;
+  border-radius: 12px;
+  resize: vertical;
+  box-shadow: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sw-review-comment .ant-input::placeholder {
+  color: #94a3b8;
+}
+
+.sw-review-comment .ant-input:hover {
+  border-color: #48cae4;
+}
+
+.sw-review-comment .ant-input:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.08);
+}
+
+.sw-review-comment .ant-input-data-count {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Actions */
+
+.sw-review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid #edf1f5;
+}
+
+.sw-review-actions .ant-btn {
+  min-width: 92px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sw-review-actions .ant-btn-default {
+  color: #475569;
+  background: #fff;
+  border-color: #dce3eb;
+}
+
+.sw-review-actions .ant-btn-default:hover {
+  color: #071a3d !important;
+  border-color: #94a3b8 !important;
+}
+
+.sw-review-actions .ant-btn-primary {
+  background: #0077b6;
+  border-color: #0077b6;
+  box-shadow: 0 4px 10px rgba(0, 119, 182, 0.18);
+}
+
+.sw-review-actions .ant-btn-primary:hover {
+  background: #0077b6 !important;
+  border-color: #0077b6 !important;
+}
+
+/* Disabled submit */
+
+.sw-review-actions .ant-btn-primary:disabled {
+  color: #fff;
+  background: #cbd5e1;
+  border-color: #cbd5e1;
+  box-shadow: none;
+}
+
+/* =========================================================
+   ANT DESIGN MODAL OVERRIDES
+   ========================================================= */
+
+.sw-map-page .ant-modal-content {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.sw-map-page .ant-modal-header {
+  margin-bottom: 0;
+  padding: 20px 24px 16px;
+  background: #fff;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.sw-map-page .ant-modal-title {
+  color: #071a3d;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sw-map-page .ant-modal-body {
+  padding: 20px 24px 24px;
+}
+
+.sw-map-page .ant-modal-close {
+  top: 17px;
+  inset-inline-end: 18px;
+  width: 34px;
+  height: 34px;
+  color: #64748b;
+  border-radius: 50%;
+}
+
+.sw-map-page .ant-modal-close:hover {
+  color: #071a3d;
+  background: #f1f5f9;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 576px) {
+  .sw-map-page .ant-modal {
+    max-width: calc(100vw - 24px);
+    margin: 12px auto;
+  }
+
+  .sw-map-page .ant-modal-header {
+    padding: 18px 18px 14px;
+  }
+
+  .sw-map-page .ant-modal-body {
+    padding: 16px 18px 20px;
+  }
+
+  .sw-map-page .ant-modal-title {
+    font-size: 17px;
+  }
+
+  .sw-review-rating {
+    padding: 18px 12px 20px;
+    margin-bottom: 18px;
+  }
+
+  .sw-review-rating .ant-rate {
+    font-size: 29px;
+    gap: 4px;
+  }
+
+  .sw-review-comment .ant-input {
+    min-height: 110px;
+  }
+
+  .sw-review-actions {
+    gap: 8px;
+  }
+
+  .sw-review-actions .ant-btn {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .sw-share-modal .ant-modal-content {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .sw-share-modal .ant-modal-header {
+    margin-bottom: 17px;
+  }
+
+  .sw-share-modal .ant-modal-title {
+    font-size: 16px;
+  }
+
+  .sw-share-options {
+    gap: 8px;
+  }
+
+  .sw-share-option {
+    min-height: 51px;
+    padding: 8px 9px;
+    gap: 9px;
+    border-radius: 11px;
+  }
+
+  .sw-share-option-icon {
+    width: 33px;
+    height: 33px;
+    flex-basis: 33px;
+    border-radius: 9px;
+    font-size: 17px;
+  }
+
+  .sw-share-option-name {
+    font-size: 12.5px;
+  }
+}
+
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -1352,8 +1946,6 @@
     gap: 12px;
   }
 }
-
-
 
 @media (max-width: 420px) {
   .sw-place-details {
