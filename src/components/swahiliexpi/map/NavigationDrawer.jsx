@@ -9,7 +9,7 @@ import {
 import { Select, Image } from "antd";
 import { useState } from "react";
 import { toLowerCase, toSmartTitleCase } from "@/libs/utils/char";
-import { fNumber, fNumberDoublePoint } from "@/libs/utils/number";
+import { fNumber, fNumberDoublePoint, fNumberPoint } from "@/libs/utils/number";
 
 export default function NavigationDrawer({
   open = false,
@@ -168,7 +168,7 @@ export default function NavigationDrawer({
                   <div className="sw-category-place-rating">
                     <StarFilled />
 
-                    <strong>{fNumberDoublePoint(place.average_rating)}</strong>
+                    <strong>{fNumberPoint(place.average_rating)}</strong>
 
                     <span>({fNumber(place.total_reviews)})</span>
                   </div>

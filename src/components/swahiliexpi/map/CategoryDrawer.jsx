@@ -9,6 +9,7 @@ import {
 import { Select, Image } from "antd";
 import { useState } from "react";
 import { toLowerCase, toSmartTitleCase } from "@/libs/utils/char";
+import { fNumber, fNumberPoint } from "@/libs/utils/number";
 
 export default function CategoryDrawer({
   open = false,
@@ -202,7 +203,7 @@ export default function CategoryDrawer({
                   <div className="sw-category-place-rating">
                     <StarFilled />
 
-                    <strong>{fNumberDoublePoint(place.average_rating)}</strong>
+                    <strong>{fNumberPoint(place.average_rating)}</strong>
 
                     <span>({fNumber(place.total_reviews)})</span>
                   </div>
